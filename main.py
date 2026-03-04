@@ -13,7 +13,7 @@ async def lifespan(app: FastAPI):
     run_sql(
         """
         CREATE TABLE IF NOT EXISTS users (
-            id_users            SERIAL PRIMARY KEY,
+            id_users            INTEGER PRIMARY KEY AUTOINCREMENT,
             password_users      VARCHAR(255) NOT NULL,
             name_users          VARCHAR(255) NOT NULL,
             email_users         VARCHAR(255) NOT NULL
@@ -65,6 +65,39 @@ def create_users(body: User):
             VALUES('{password_users}', '{name_users}', '{email_users}')
         """
     )
+
+#Criação da rota para achar um user pelo ID
+@router.get("/{id_users}")
+def user_by_id(id_users: int):
+    #Procura o usuário pelo ID e manda todas informações dele
+    return  run_sql("SELECT * FROM users WHERE id_users = ?", (id_users,))
+
+#Rota que executa PUT
+@router.put("/users/{id_user}")
+def edit_user(id_user: int, body: User):
+
+    #Dados do Body
+    password = body.password_users
+    name = body.name_users
+    email = body.email_users
+
+    info_sql = """
+        UPDATE users
+        SET password_users = ?, name_users = ?, email_users = ?
+        WHERE id_users = ?
+    """
+    
+    return  run_sql(info_sql, (password, name, email, id_user))
+
+@router.delete("/users/del/{id_user}")
+def del_user(id_user: int, ):
+
+    run_sql(
+        "DELETE FROM users WHERE id_users = ?", (id_user,)
+    )
+
+    return {"message": "Você deletou o usuário: {id_user}"}
+
 
 #Registra as rotas dentro do app
 app.include_router(router=router)
