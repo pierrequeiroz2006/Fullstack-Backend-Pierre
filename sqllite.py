@@ -1,7 +1,7 @@
 import sqlite3
 
 # Função responsável por executar qualquer comando SQL no banco, com seu parâmetro sendo uma string com o cóodigo SQL
-def run_sql(sql: str):
+def run_sql(sql: str, params: tuple = ()):
     # Abre (ou cria, se não existir) o banco de dados users.db
     con = sqlite3.connect("users.db")
 
@@ -9,7 +9,7 @@ def run_sql(sql: str):
     cur = con.cursor()
 
     # Executa o código SQL recebido como string
-    res = cur.execute(sql)
+    res = cur.execute(sql, params)
 
     # Busca todos os resultados retornados pelo comando, detalhe que para comandos de inserção de valores geralmente retorna uma lista vazia 
     data = res.fetchall()
