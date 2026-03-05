@@ -46,13 +46,13 @@ class User(BaseModel):
     email_users: str
 
 #Rota que excuta método GET
-@router.get("/")
+@router.get("/users")
 def get_users():
     #Executa uma query que busca todos os usuários da tabela users
     return run_sql("SELECT * FROM users")
 
 #Rota que executa método POST
-@router.post("/users")
+@router.post("/users/post")
 def create_users(body: User):
     
     # Extraindo dados do body(Seguindo o padrão definido pelo BaseModel)
@@ -62,18 +62,18 @@ def create_users(body: User):
     return run_sql(
         f"""
             INSERT INTO users(password_users, name_users, email_users) 
-            VALUES('{password_users}', '{name_users}', '{email_users}')
+            VALUES('{password_users}', '{name_users}', '{email_users}') 
         """
     )
 
 #Criação da rota para achar um user pelo ID
-@router.get("/{id_users}")
+@router.get("/users/{id_users}")
 def user_by_id(id_users: int):
     #Procura o usuário pelo ID e manda todas informações dele
-    return  run_sql("SELECT * FROM users WHERE id_users = ?", (id_users,))
+    return  run_sql("SELECT * FROM users WHERE id_users = ?", (id_users,))  
 
 #Rota que executa PUT
-@router.put("/users/{id_user}")
+@router.put("/users/edit/{id_user}")
 def edit_user(id_user: int, body: User):
 
     #Dados do Body
