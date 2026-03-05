@@ -73,7 +73,7 @@ def user_by_id(id_users: int):
     return  run_sql("SELECT * FROM users WHERE id_users = ?", (id_users,))  
 
 #Rota que executa PUT
-@router.put("/users/edit/{id_user}")
+@router.put("/users/{id_user}")
 def edit_user(id_user: int, body: User):
 
     #Dados do Body
@@ -89,7 +89,7 @@ def edit_user(id_user: int, body: User):
     
     return  run_sql(info_sql, (password, name, email, id_user))
 
-@router.delete("/users/del/{id_user}")
+@router.delete("/users/{id_user}")
 def del_user(id_user: int, ):
 
     run_sql(
